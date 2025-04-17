@@ -81,9 +81,9 @@
         }
 
         function extractVideoId(url) {
-            const regex = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|(?:v|e(?:mbed)?\.com\/watch\?v=))([a-zA-Z0-9_-]{11}))/;
+            const regex = /(?:youtube\.com(?:\/[^\/\n\s]+\/\S+\/|\/(?:v|e(?:mbed)?)\/|(?:v|e(?:mbed)?\.com\/(?:watch\?v=)))([a-zA-Z0-9_-]{11}))/;
             const matches = url.match(regex);
-            return matches ? matches[1] : null;
+            return matches && matches[1] ? matches[1] : null;
         }
 
         function pixelateFrame(ctx, width, height) {
@@ -115,4 +115,5 @@
     </script>
 </body>
 </html>
+
 
