@@ -3,39 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3rd Person Shooter</title>
+  <title>3D 3rd Person Shooter</title>
   <style>
     body, html { margin: 0; height: 100%; overflow: hidden; }
-    canvas { background: #87CEEB; display: block; }
+    canvas { display: block; background: #87CEEB; }
   </style>
 </head>
 <body>
-  <canvas id="gameCanvas"></canvas>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.139.0/build/three.min.js"></script>
   <script>
-    const c = document.getElementById('gameCanvas').getContext('2d');
-    c.canvas.width = window.innerWidth;
-    c.canvas.height = window.innerHeight;
-    let p = { x: c.canvas.width / 2, y: c.canvas.height / 2, w: 50, h: 50, spd: 5, c: 'blue' }, b = [];
-    document.addEventListener('keydown', e => {
-      if (e.key === 'w') p.y -= p.spd;
-      if (e.key === 's') p.y += p.spd;
-      if (e.key === 'a') p.x -= p.spd;
-      if (e.key === 'd') p.x += p.spd;
-      if (e.key === ' ') b.push({ x: p.x + p.w / 2, y: p.y + p.h / 2, spd: 7 });
+    // Initialize scene, camera, and renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Create a simple sky (blue background)
+    const skyGeometry = new THREE.SphereGeometry(500, 60, 40);
+    const skyMaterial = new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide });
+    const sky = new THREE.Mesh(skyGeometry, skyMaterial);
+    scene.add(sky);
+
+    // Create a 3D player (cube) and add to the scene
+    const playerGeometry = new THREE.BoxGeometry(1, 2, 1);
+    const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+    const player = new THREE.Mesh(playerGeometry, playerMaterial);
+    player.position.set(0, 1, 0); // Set player position
+    scene.add(player);
+
+    // Create gun (cube as a placeholder)
+    const gunGeometry = new THREE.BoxGeometry(0.2, 1, 0.5);
+    const gunMaterial = new THREE.MeshBasicMaterial({ color: 0x555555 });
+    const gun = new THREE.Mesh(gunGeometry, gunMaterial);
+    gun.position.set(0.5, 1, 0); // Position the gun
+    player.add(gun);
+
+    // Set initial camera position
+    camera.position.set(0, 3, 5);
+    camera.lookAt(player.position);
+
+    // Player movement speed
+    let speed = 16;
+
+    // Bullet array
+    let bullets = [];
+
+    // Keyboard event listeners for player movement and shooting
+    const keys = { W: false, A: false, S: false, D: false, Space: false };
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'w') keys.W = true;
+      if (e.key === 'a') keys.A = true;
+      if (e.key === 's') keys.S = true;
+      if (e.key === 'd') keys.D = true;
+      if (e.key === ' ') keys.Space = true;
     });
-    function update() {
-      c.clearRect(0, 0, c.canvas.width, c.canvas.height);
-      c.fillStyle = p.c;
-      c.fillRect(p.x, p.y, p.w, p.h);
-      b.forEach((bb, i) => {
-        bb.x += 7;
-        if (bb.x > c.canvas.width) b.splice(i, 1);
-        c.fillStyle = 'red';
-        c.fillRect(bb.x, bb.y, 10, 10);
-      });
-      requestAnimationFrame(update);
+
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'w') keys.W = false;
+      if (e.key === 'a') keys.A = false;
+      if (e.key === 's') keys.S = false;
+      if (e.key === 'd') keys.D = false;
+      if (e.key === ' ') keys.Space = false;
+    });
+
+    // Shooting mechanism
+    function shootBullet() {
+      const bulletGeometry = new THREE.SphereGeometry(0.1, 8, 8);
+      const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
+      bullet.position.set(player.position.x, player.position.y + 1, player.position.z); // Shoot from player position
+      bullet.velocity = new THREE.Vector3(0, 0, -1).normalize().multiplyScalar(10); // Direction and speed
+      bullets.push(bullet);
+      scene.add(bullet);
     }
-    update();
+
+    // Main game loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Player movement
+      if (keys.W) player.position.z -= speed * 0.05;
+      if (keys.S) player.position.z += speed * 0.05;
+      if (keys.A) player.position.x -= speed * 0.05;
+      if (keys.D) player.position.x += speed * 0.05;
+
+      // Shoot bullets when space is pressed
+      if (keys.Space) shootBullet();
+
+      // Move bullets
+      bullets.forEach((bullet, i) => {
+        bullet.position.add(bullet.velocity);
+        if (bullet.position.z < -50) {
+          bullets.splice(i, 1); // Remove bullet when off-screen
+          scene.remove(bullet);
+        }
+      });
+
+      // Update camera position
+      camera.position.x = player.position.x;
+      camera.position.z = player.position.z + 5;
+      camera.lookAt(player.position);
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
   </script>
 </body>
 </html>
