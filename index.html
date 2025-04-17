@@ -1,116 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D 3rd Person Shooter</title>
-  <style>
-    body, html { margin: 0; height: 100%; overflow: hidden; }
-    canvas { display: block; background: #87CEEB; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT-Like on Hugging Face</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        .chat-container {
+            width: 500px;
+            max-width: 100%;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding-right: 10px;
+        }
+
+        .input-box {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .input-box button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.139.0/build/three.min.js"></script>
-  <script>
-    // Initialize scene, camera, and renderer
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    <div class="chat-container">
+        <div class="messages" id="messages"></div>
+        <div class="input-box">
+            <input type="text" id="userInput" placeholder="Ask me anything..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
 
-    // Create a simple sky (blue background)
-    const skyGeometry = new THREE.SphereGeometry(500, 60, 40);
-    const skyMaterial = new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide });
-    const sky = new THREE.Mesh(skyGeometry, skyMaterial);
-    scene.add(sky);
+    <script>
+        async function sendMessage() {
+            const userMessage = document.getElementById("userInput").value;
+            if (userMessage.trim() === "") return;
 
-    // Create a 3D player (cube) and add to the scene
-    const playerGeometry = new THREE.BoxGeometry(1, 2, 1);
-    const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
-    const player = new THREE.Mesh(playerGeometry, playerMaterial);
-    player.position.set(0, 1, 0); // Set player position
-    scene.add(player);
+            const messagesDiv = document.getElementById("messages");
+            messagesDiv.innerHTML += `<div><b>You:</b> ${userMessage}</div>`;
 
-    // Create gun (cube as a placeholder)
-    const gunGeometry = new THREE.BoxGeometry(0.2, 1, 0.5);
-    const gunMaterial = new THREE.MeshBasicMaterial({ color: 0x555555 });
-    const gun = new THREE.Mesh(gunGeometry, gunMaterial);
-    gun.position.set(0.5, 1, 0); // Position the gun
-    player.add(gun);
+            // Send the message to Hugging Face's API (without API key)
+            const response = await fetch('https://api-inference.huggingface.co/models/gpt2', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    inputs: userMessage,
+                }),
+            });
 
-    // Set initial camera position
-    camera.position.set(0, 3, 5);
-    camera.lookAt(player.position);
-
-    // Player movement speed
-    let speed = 16;
-
-    // Bullet array
-    let bullets = [];
-
-    // Keyboard event listeners for player movement and shooting
-    const keys = { W: false, A: false, S: false, D: false, Space: false };
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'w') keys.W = true;
-      if (e.key === 'a') keys.A = true;
-      if (e.key === 's') keys.S = true;
-      if (e.key === 'd') keys.D = true;
-      if (e.key === ' ') keys.Space = true;
-    });
-
-    document.addEventListener('keyup', (e) => {
-      if (e.key === 'w') keys.W = false;
-      if (e.key === 'a') keys.A = false;
-      if (e.key === 's') keys.S = false;
-      if (e.key === 'd') keys.D = false;
-      if (e.key === ' ') keys.Space = false;
-    });
-
-    // Shooting mechanism
-    function shootBullet() {
-      const bulletGeometry = new THREE.SphereGeometry(0.1, 8, 8);
-      const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-      const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
-      bullet.position.set(player.position.x, player.position.y + 1, player.position.z); // Shoot from player position
-      bullet.velocity = new THREE.Vector3(0, 0, -1).normalize().multiplyScalar(10); // Direction and speed
-      bullets.push(bullet);
-      scene.add(bullet);
-    }
-
-    // Main game loop
-    function animate() {
-      requestAnimationFrame(animate);
-
-      // Player movement
-      if (keys.W) player.position.z -= speed * 0.05;
-      if (keys.S) player.position.z += speed * 0.05;
-      if (keys.A) player.position.x -= speed * 0.05;
-      if (keys.D) player.position.x += speed * 0.05;
-
-      // Shoot bullets when space is pressed
-      if (keys.Space) shootBullet();
-
-      // Move bullets
-      bullets.forEach((bullet, i) => {
-        bullet.position.add(bullet.velocity);
-        if (bullet.position.z < -50) {
-          bullets.splice(i, 1); // Remove bullet when off-screen
-          scene.remove(bullet);
+            const data = await response.json();
+            const botReply = data.generated_text || "Sorry, I couldn't generate a response.";
+            messagesDiv.innerHTML += `<div><b>ChatGPT:</b> ${botReply}</div>`;
+            document.getElementById("userInput").value = '';
         }
-      });
-
-      // Update camera position
-      camera.position.x = player.position.x;
-      camera.position.z = player.position.z + 5;
-      camera.lookAt(player.position);
-
-      renderer.render(scene, camera);
-    }
-
-    animate();
-  </script>
+    </script>
 </body>
 </html>
 
