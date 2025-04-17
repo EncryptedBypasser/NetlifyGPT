@@ -32,6 +32,19 @@
             flex: 1;
             padding: 10px;
             overflow-y: auto;
+            max-height: 70vh;
+            border-bottom: 1px solid #ddd;
+        }
+        .console {
+            font-family: monospace;
+            color: #888;
+            background-color: #1d1f2c;
+            padding: 10px;
+            font-size: 12px;
+            overflow-y: auto;
+            max-height: 20vh;
+            color: white;
+            margin-top: 10px;
         }
         .input-container {
             display: flex;
@@ -69,12 +82,24 @@
         <input type="text" id="user-input" placeholder="Type a message..." />
         <button onclick="sendMessage()">Send</button>
     </div>
+    <div class="console" id="console">
+        <!-- Console will display logs -->
+    </div>
 </div>
 
 <script>
-    const apiKey = "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"; // Replace with your OpenAI API key
+    const apiKey = "YOUR_OPENAI_API_KEY"; // Replace with your OpenAI API key
     const chatContainer = document.getElementById('messages');
     const userInput = document.getElementById('user-input');
+    const consoleContainer = document.getElementById('console');
+
+    // Function to log messages to the console div
+    function logToConsole(message) {
+        const logMessage = document.createElement('div');
+        logMessage.textContent = message;
+        consoleContainer.appendChild(logMessage);
+        consoleContainer.scrollTop = consoleContainer.scrollHeight;
+    }
 
     async function sendMessage() {
         const userMessage = userInput.value;
@@ -84,6 +109,9 @@
         chatContainer.innerHTML += `<div><strong>You:</strong> ${userMessage}</div>`;
         userInput.value = '';
         chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        // Log user message to console
+        logToConsole(`You: ${userMessage}`);
 
         try {
             // Call OpenAI API
@@ -115,12 +143,24 @@
             chatContainer.innerHTML += `<div><strong>ChatGPT:</strong> ${botMessage}</div>`;
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
+            // Log bot response to console
+            logToConsole(`ChatGPT: ${botMessage}`);
+
         } catch (error) {
             console.error("Error sending message:", error);
             chatContainer.innerHTML += `<div><strong>Error:</strong> ${error.message}</div>`;
+            logToConsole(`Error: ${error.message}`);
         }
     }
+
+    // Auto open console on F12
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'F12') {
+            consoleContainer.style.display = 'block'; // Open console
+        }
+    });
 </script>
 
 </body>
 </html>
+
