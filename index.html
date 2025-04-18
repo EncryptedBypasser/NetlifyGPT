@@ -1,41 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Proxy</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>50 Web Games</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .game {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    iframe {
+      width: 100%;
+      height: 200px;
+      border: none;
+      border-radius: 8px;
+    }
+    .game h3 {
+      margin: 10px 0 0;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Proxy Service</h1>
-    <form id="proxyForm">
-        <label for="url">Enter URL to Proxy:</label>
-        <input type="text" id="url" name="url" placeholder="http://example.com" required>
-        <button type="submit">Submit</button>
-    </form>
+  <h1>50 Free Web Games</h1>
+  <div class="games">
+    <!-- 50 games embedded below -->
+    <!-- These are placeholders using sample URLs or embeds from various popular sources -->
+    <!-- You can replace src values with actual playable HTML5 games from trusted sites or self-hosted ones -->
 
-    <div id="responseArea" style="margin-top: 20px;">
-        <h2>Response:</h2>
-        <pre id="responseContent"></pre>
+    <!-- Here's how one game embed might look -->
+    <div class="game">
+      <iframe src="https://itch.io/embed-upload/123456?color=333333"></iframe>
+      <h3>Platformer Madness</h3>
     </div>
 
-    <script>
-        document.getElementById('proxyForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const url = document.getElementById('url').value;
+    <!-- Repeat for 49 more -->
+    <!-- For the sake of this preview, we'll loop in JavaScript to simulate 50 blocks -->
+  </div>
 
-            // Make an API call to the proxy server
-            fetch(`http://localhost:8080/?url=${encodeURIComponent(url)}`)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('responseContent').textContent = data;
-                })
-                .catch(error => {
-                    document.getElementById('responseContent').textContent = "Error: " + error;
-                });
-        });
-    </script>
+  <script>
+    const gamesContainer = document.querySelector('.games');
+    const gameLinks = [
+      'https://itch.io/embed-upload/123456?color=333333',
+      'https://itch.io/embed-upload/234567?color=336699',
+      'https://itch.io/embed-upload/345678?color=996633',
+      // Add up to 50 iframe src URLs or duplicates for demo
+    ];
+
+    const titles = [
+      'Platformer Madness', 'Rocket Escape', 'Zombie Defense', 'Pixel Racer', 'Tower Stack',
+      'Jump & Run', 'Fruit Slicer', 'Maze Puzzle', 'Alien Invader', 'Memory Flip',
+      'Ping Pong Classic', 'Color Match', 'Number Merge', 'Fishing Game', 'Archery Master',
+      'Fast Typing', 'Word Scramble', '2048', 'Snake Game', 'Breakout',
+      'Tetris', 'Connect 4', 'Pac-Man Clone', 'Flappy Clone', 'Helix Jump',
+      'Ball Shooter', 'Bubble Pop', 'Frog Leap', 'Basket Shot', 'Stick Ninja',
+      'Knife Hit', 'Laser Maze', 'Ghost Hunter', 'Bridge Builder', 'Chess Game',
+      'Sudoku', 'Dots & Boxes', 'Hangman', 'Crossword', 'RPG Quest',
+      'Treasure Hunt', 'Fireboy Watergirl', 'Air Hockey', 'Jetpack Joyride', 'Mini Golf',
+      'Sniper Mission', 'Mine Sweeper', 'Truck Trials', 'Alien Run', 'Rhythm Tap'
+    ];
+
+    for (let i = 0; i < 50; i++) {
+      const gameDiv = document.createElement('div');
+      gameDiv.className = 'game';
+
+      const iframe = document.createElement('iframe');
+      iframe.src = gameLinks[i % gameLinks.length]; // Loop demo links
+
+      const h3 = document.createElement('h3');
+      h3.textContent = titles[i % titles.length];
+
+      gameDiv.appendChild(iframe);
+      gameDiv.appendChild(h3);
+
+      gamesContainer.appendChild(gameDiv);
+    }
+  </script>
 </body>
 </html>
-
 
 
