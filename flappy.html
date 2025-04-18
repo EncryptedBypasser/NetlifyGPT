@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Flappy Bird</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { background: #70c5ce; display: block; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="320" height="480"></canvas>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let frames = 0;
+    const DEGREE = Math.PI / 180;
+
+    const sprite = new Image();
+    sprite.src = "https://raw.githubusercontent.com/sourabhv/FlapPyBird/master/assets/sprites/sheet.png";
+
+    const state = {
+      current: 0,
+      getReady: 0,
+      game: 1,
+      over: 2
+    };
+
+    document.addEventListener("keydown", () => {
+      switch (state.current) {
+        case state.getReady:
+          state.current = state.game;
+          break;
+        case state.game:
+          bird.flap();
+          break;
+        case state.over
