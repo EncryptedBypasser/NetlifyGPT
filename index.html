@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>50 Web Games</title>
+  <title>100 Web Games</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -40,20 +40,22 @@
   </style>
 </head>
 <body>
-  <h1>50 Free Web Games</h1>
+  <h1>100 Free Web Games</h1>
   <div class="games">
-    <!-- 50 games embedded below -->
-    <!-- These are placeholders using sample URLs or embeds from various popular sources -->
-    <!-- You can replace src values with actual playable HTML5 games from trusted sites or self-hosted ones -->
-
-    <!-- Here's how one game embed might look -->
+    <!-- Add 100 game blocks with iframe links below -->
     <div class="game">
       <iframe src="https://itch.io/embed-upload/123456?color=333333"></iframe>
       <h3>Platformer Madness</h3>
     </div>
-
-    <!-- Repeat for 49 more -->
-    <!-- For the sake of this preview, we'll loop in JavaScript to simulate 50 blocks -->
+    <div class="game">
+      <iframe src="https://itch.io/embed-upload/234567?color=336699"></iframe>
+      <h3>Rocket Escape</h3>
+    </div>
+    <div class="game">
+      <iframe src="https://itch.io/embed-upload/345678?color=996633"></iframe>
+      <h3>Zombie Defense</h3>
+    </div>
+    <!-- Continue to add 97 more games here -->
   </div>
 
   <script>
@@ -62,23 +64,29 @@
       'https://itch.io/embed-upload/123456?color=333333',
       'https://itch.io/embed-upload/234567?color=336699',
       'https://itch.io/embed-upload/345678?color=996633',
-      // Add up to 50 iframe src URLs or duplicates for demo
+      // Add 97 more game URLs here
     ];
 
     const titles = [
       'Platformer Madness', 'Rocket Escape', 'Zombie Defense', 'Pixel Racer', 'Tower Stack',
       'Jump & Run', 'Fruit Slicer', 'Maze Puzzle', 'Alien Invader', 'Memory Flip',
       'Ping Pong Classic', 'Color Match', 'Number Merge', 'Fishing Game', 'Archery Master',
-      'Fast Typing', 'Word Scramble', '2048', 'Snake Game', 'Breakout',
-      'Tetris', 'Connect 4', 'Pac-Man Clone', 'Flappy Clone', 'Helix Jump',
-      'Ball Shooter', 'Bubble Pop', 'Frog Leap', 'Basket Shot', 'Stick Ninja',
-      'Knife Hit', 'Laser Maze', 'Ghost Hunter', 'Bridge Builder', 'Chess Game',
-      'Sudoku', 'Dots & Boxes', 'Hangman', 'Crossword', 'RPG Quest',
-      'Treasure Hunt', 'Fireboy Watergirl', 'Air Hockey', 'Jetpack Joyride', 'Mini Golf',
-      'Sniper Mission', 'Mine Sweeper', 'Truck Trials', 'Alien Run', 'Rhythm Tap'
+      'Fast Typing', 'Word Scramble', '2048', 'Snake Game', 'Breakout', 'Tetris', 'Connect 4',
+      'Pac-Man Clone', 'Flappy Clone', 'Helix Jump', 'Ball Shooter', 'Bubble Pop', 'Frog Leap',
+      'Basket Shot', 'Stick Ninja', 'Knife Hit', 'Laser Maze', 'Ghost Hunter', 'Bridge Builder',
+      'Chess Game', 'Sudoku', 'Dots & Boxes', 'Hangman', 'Crossword', 'RPG Quest', 'Treasure Hunt',
+      'Fireboy Watergirl', 'Air Hockey', 'Jetpack Joyride', 'Mini Golf', 'Sniper Mission',
+      'Mine Sweeper', 'Truck Trials', 'Alien Run', 'Rhythm Tap', 'Racing Rivals', 'Space Shooter',
+      'Dragon Quest', 'Super Bomberman', 'Zombie Rush', 'Pixel Hunt', 'Maze Runner', 'Asteroid Dodger',
+      'Dinosaur Jump', 'Word Master', 'Memory Match', 'Puzzle Solitaire', 'Ninja Dash', 'Fruit Collector',
+      'Pirate Battle', 'Kung Fu Master', 'Warrior Fight', 'City Builder', 'Monster Escape', 'Parkour Hero',
+      'Jet Ski Racing', 'Robot Arena', 'Super Escape', 'Ninja Fight', 'Time Killer', 'Shuttle Mission',
+      'Moon Landing', 'Tower Defense', 'Super Sniper', 'Evil Lab', 'Lunar Expedition', 'Beach Volleyball',
+      'Super Soccer', 'Go-Kart Racing', 'Beach Sprint', 'Underwater Dive', 'Virtual Reality', 'Extreme Skating',
+      'Glider Challenge', 'Tetris Runner'
     ];
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 100; i++) {
       const gameDiv = document.createElement('div');
       gameDiv.className = 'game';
 
@@ -96,5 +104,3 @@
   </script>
 </body>
 </html>
-
-
